@@ -1,6 +1,6 @@
 from src.base_api import BaseAPI
 
-class Professors(BaseAPI):
+class Bus(BaseAPI):
     ENDPOINT_ROUTES = 'bus/routes'
     ENDPOINT_STOPS = 'bus/stops'
 
@@ -23,7 +23,7 @@ class Professors(BaseAPI):
 
         """
 
-        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_ids}', **kwargs)
+        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_ids}')
     
     
     def list_stops(self):
@@ -34,7 +34,7 @@ class Professors(BaseAPI):
 
         """
 
-        return self.make_request(self.ENDPOINT_STOPS, **kwargs)
+        return self.make_request(self.ENDPOINT_STOPS)
 
    
     def get_specific_stops(self, stop_ids):
@@ -45,7 +45,7 @@ class Professors(BaseAPI):
 
         """
 
-        return self.make_request(f'{self.ENDPOINT_STOPS}/{stop_ids}', **kwargs)
+        return self.make_request(f'{self.ENDPOINT_STOPS}/{stop_ids}')
 
     def current_bus_locations_by_route(self, route_id):
 
@@ -55,7 +55,7 @@ class Professors(BaseAPI):
 
         """
 
-        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_id}/locations', **kwargs)
+        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_id}/locations')
 
     def bus_schedules(self, route_id):
 
@@ -65,7 +65,7 @@ class Professors(BaseAPI):
 
         """
 
-        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_id}/schedules', **kwargs)
+        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_id}/schedules')
 
     def get_arrivals_for_stop(self, route_id, stop_id):
 
@@ -75,7 +75,4 @@ class Professors(BaseAPI):
 
         """
 
-        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_id}/arrivals/{stop_id}', **kwargs)
-
-        
-
+        return self.make_request(f'{self.ENDPOINT_ROUTES}/{route_id}/arrivals/{stop_id}')
