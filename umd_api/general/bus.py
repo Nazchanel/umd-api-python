@@ -16,15 +16,17 @@ class Bus(_BaseAPI):
         return self._make_request(self._ENDPOINT_ROUTES)
     
     
-    def view_specific_routes(self, route_ids):
+    def view_specific_routes(self, route_ids : list):
         
         """
 
         Get route data for one or more routes
 
         """
-
-        return self._make_request(f'{self._ENDPOINT_ROUTES}/{route_ids}')
+        
+        routes_formatted = ','.join(route_ids)
+        
+        return self._make_request(f'{self._ENDPOINT_ROUTES}/{routes_formatted}')
     
     
     def list_stops(self):

@@ -14,7 +14,7 @@ class Map(_BaseAPI):
 
         return self._make_request(f'{self._ENDPOINT_BUILDINGS}')
     
-    def get_buildings(self, building_id):
+    def get_buildings(self, building_id : list):
         
         """
 
@@ -22,5 +22,7 @@ class Map(_BaseAPI):
 
         """
         
-        return self._make_request(f'{self._ENDPOINT_BUILDINGS}/{building_id}')
+        buildings_formatted = ','.join(building_id)
+
+        return self._make_request(f'{self._ENDPOINT_BUILDINGS}/{buildings_formatted}')
     

@@ -44,10 +44,12 @@ class Courses(_BaseAPI):
         View specific sections by section IDs.
         
         """
-        
-        return self._make_request(f'{self._ENDPOINT_SECTIONS}/{section_ids}', semester=semester)
 
-    def view_specific_courses(self, course_ids, semester=None):
+        sections_formatted = ','.join(section_ids)
+
+        return self._make_request(f'{self._ENDPOINT_SECTIONS}/{sections_formatted}', semester=semester)
+
+    def view_specific_courses(self, course_ids : list, semester=None):
         
         """
         
@@ -55,27 +57,34 @@ class Courses(_BaseAPI):
         
         """
         
-        return self._make_request(f'{self._ENDPOINT_COURSES}/{course_ids}', semester=semester)
+        courses_formatted = ','.join(course_ids)
+
+        return self._make_request(f'{self._ENDPOINT_COURSES}/{courses_formatted}', semester=semester)
         
-    def view_sections_for_course(self, course_ids, semester=None):
+    def view_sections_for_course(self, course_ids : list, semester=None):
         
         """
         
         View sections for specific courses.
         
         """
-        
-        return self._make_request(f'{self._ENDPOINT_COURSES}/{course_ids}/sections', semester=semester)
 
-    def view_specific_sections_for_course(self, course_ids, section_ids):
+        courses_formatted = ','.join(course_ids)
+        
+        return self._make_request(f'{self._ENDPOINT_COURSES}/{courses_formatted}/sections', semester=semester)
+
+    def view_specific_sections_for_course(self, course_ids : list, section_ids : list):
         
         """
         
         View specific sections for specific courses.
         
         """
+
+        sections_formatted = ','.join(section_ids)
+        courses_formatted = ','.join(course_ids)
         
-        return self._make_request(f'{self._ENDPOINT_COURSES}/{course_ids}/sections/{section_ids}')
+        return self._make_request(f'{self._ENDPOINT_COURSES}/{courses_formatted}/sections/{sections_formatted   }')
 
     def list_semesters(self):
         
