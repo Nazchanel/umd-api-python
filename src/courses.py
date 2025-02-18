@@ -1,7 +1,6 @@
 from src.base_api import BaseAPI
 
 class Courses(BaseAPI):
-    # Define the endpoint constants
     ENDPOINT_COURSES = 'courses'
     ENDPOINT_MINIFIED_COURSES = 'courses/list'
     ENDPOINT_SECTIONS = 'courses/sections'
