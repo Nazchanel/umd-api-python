@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "umd-api"  # Replace with your package name
+version = "0.5.0"  # Version of your package
+description = "A package for accessing the UMD API in Python"
+readme = "README.md"
+authors = [
+    { name = "Eshan Iyer", email = "eshaniyer@duck.com" }
+]
+license = { text = "MIT" }  # Update license as needed
+keywords = ["bus", "routes", "API"]  # Add relevant keywords
+homepage = "https://github.com/Nazchanel/umd-api-python"  # URL of the project
+repository = "https://github.com/Nazchanel/umd-api-python"  # GitHub repo URL
+dependencies = [
+    # List your package dependencies here
+    # e.g. "requests", "numpy"
+]
+
+[project.urls]
+"Documentation" = "https://your_package_name.readthedocs.io/"
+"Source" = "https://github.com/yourusername/your_package_name"
