@@ -1,4 +1,4 @@
-from src.base_api import BaseAPI
+from .base_api import BaseAPI
 
 class Majors(BaseAPI):
     def list_majors(self):

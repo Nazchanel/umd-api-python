@@ -4,15 +4,13 @@ class BaseAPI:
     BASE_URL = 'https://api.umd.io/v1'
 
     def make_request(self, endpoint, **kwargs):
-        # Automatically create params dictionary from method arguments
         params = self._extract_params(**kwargs)
 
         try:
             response = requests.get(f'{self.BASE_URL}/{endpoint}', params=params)
-            response.raise_for_status()  # Raise an error for bad responses
+            response.raise_for_status() 
             return response.json()
         except requests.HTTPError as http_err:
-            # Call handle_error if an HTTP error occurred
             self.handle_error(http_err, response)
         except requests.RequestException as err:
             print(f"An error occurred: {err}")
@@ -20,7 +18,6 @@ class BaseAPI:
             print("Error: Received a non-JSON response.")
 
     def _extract_params(self, **kwargs):
-        # Filter out None values from kwargs
         return {k: v for k, v in kwargs.items() if v is not None}
 
     def handle_error(self, http_err, response):

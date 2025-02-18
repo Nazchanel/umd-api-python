@@ -1,7 +1,7 @@
-from src.base_api import BaseAPI
+from .base_api import BaseAPI
 
 class Map(BaseAPI):
-    ENDPOINT_BUILDINGS = 'map/buildings'
+    _ENDPOINT_BUILDINGS = 'map/buildings'
     
     def list_buildings(self):
         
@@ -11,7 +11,7 @@ class Map(BaseAPI):
 
         """
 
-        return self.make_request(f'{self.ENDPOINT_BUILDINGS}')
+        return self.make_request(f'{self._ENDPOINT_BUILDINGS}')
     
     def get_buildings(self, building_id):
         
@@ -21,5 +21,5 @@ class Map(BaseAPI):
 
         """
         
-        return self.make_request(f'{self.ENDPOINT_BUILDINGS}/{building_id}')
+        return self.make_request(f'{self._ENDPOINT_BUILDINGS}/{building_id}')
     
