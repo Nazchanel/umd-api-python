@@ -2,13 +2,13 @@ import requests
 
 class _BaseAPI:
     
-    __BASE_URL = 'https://api.umd.io/v1'
+    _BASE_URL = 'https://planetterp.com/api/v1'
 
     def _make_request(self, endpoint, **kwargs):
         params = self._extract_params(**kwargs)
 
         try:
-            response = requests.get(f'{self.__BASE_URL}/{endpoint}', params=params)
+            response = requests.get(f'{self._BASE_URL}/{endpoint}', params=params)
             response.raise_for_status() 
             return response.json()
         except requests.HTTPError as http_err:

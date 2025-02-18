@@ -38,7 +38,7 @@ class Bus(_BaseAPI):
         return self._make_request(self._ENDPOINT_STOPS)
 
    
-    def get_specific_stops(self, stop_ids):
+    def get_specific_stops(self, stop_ids : list):
 
         """
 
@@ -46,7 +46,15 @@ class Bus(_BaseAPI):
 
         """
 
-        return self._make_request(f'{self._ENDPOINT_STOPS}/{stop_ids}')
+        # Formatting
+        stop_ids_str = ""
+
+        for i in stop_ids:
+            stop_ids_str += "stop_id="
+            stop_ids_str += i
+            stop_ids_str += "&"
+
+        return self._make_request(f'{self._ENDPOINT_STOPS}?{stop_ids_str}')
 
     def current_bus_locations_by_route(self, route_id):
 

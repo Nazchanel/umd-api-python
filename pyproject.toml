@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "umd-api" 
-version = "0.5.2"
+version = "0.6"
 description = "A package for accessing the UMD API in Python"
 readme = "README.md"
 authors = [

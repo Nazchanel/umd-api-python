@@ -8,4 +8,4 @@ class Professors(_BaseAPI):
         Returns list of all professors
         
         """
-        return self._make_request('professors', name, course_id)
+        return self._make_request('professors', name=name, course_id=course_id)

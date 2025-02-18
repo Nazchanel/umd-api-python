@@ -1,6 +1,6 @@
 from .base_api import _BaseAPI
 
-class Courses(BaseAPI):
+class Courses(_BaseAPI):
     
     _ENDPOINT_COURSES = 'courses'
     _ENDPOINT_MINIFIED_COURSES = 'courses/list'
@@ -15,7 +15,7 @@ class Courses(BaseAPI):
         List all courses with optional filters.
         
         """
-        return self.make_request(self._ENDPOINT_COURSES, sort, page, per_page, semester, credits, dept_id, gen_ed)
+        return self._make_request(self._ENDPOINT_COURSES, sort=sort, page=page, per_page=per_page, semester=semester, credits=credits, dept_id=dept_id, gen_ed=gen_ed)
 
     def list_minified_courses(self, sort=None, page=None, per_page=None, semester=None):
 
@@ -25,7 +25,7 @@ class Courses(BaseAPI):
 
         """
         
-        return self.make_request(self._ENDPOINT_COURSES, sort, page, per_page, semester)
+        return self._make_request(self._ENDPOINT_COURSES, sort=sort, page=page, per_page=per_page, semester=semester)
 
     def list_sections(self, sort=None, page=None, per_page=None, course_id=None, seats=None, open_seats=None, waitlist=None, semester=None):
 
@@ -35,9 +35,9 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(self._ENDPOINT_SECTIONS, sort, page, per_page, course_id, seats, open_seats, waitlist, semester)
+        return self._make_request(self._ENDPOINT_SECTIONS, sort=sort, page=page, per_page=per_page, course_id=course_id, seats=seats, open_seats=open_seats, waitlis=waitlist, semester=semester)
 
-    def view_specific_sections(self, section_ids, semester=None):
+    def view_specific_sections(self, section_ids : list, semester=None):
         
         """
         
@@ -45,7 +45,7 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(f'{self._ENDPOINT_SECTIONS}/{section_ids}', semester)
+        return self._make_request(f'{self._ENDPOINT_SECTIONS}/{section_ids}', semester=semester)
 
     def view_specific_courses(self, course_ids, semester=None):
         
@@ -55,7 +55,7 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(f'{self._ENDPOINT_COURSES}/{course_ids}', semester)
+        return self._make_request(f'{self._ENDPOINT_COURSES}/{course_ids}', semester=semester)
         
     def view_sections_for_course(self, course_ids, semester=None):
         
@@ -65,7 +65,7 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(f'{self._ENDPOINT_COURSES}/{course_ids}/sections', semester)
+        return self._make_request(f'{self._ENDPOINT_COURSES}/{course_ids}/sections', semester=semester)
 
     def view_specific_sections_for_course(self, course_ids, section_ids):
         
@@ -75,7 +75,7 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(f'{self._ENDPOINT_COURSES}/{course_ids}/sections/{section_ids}')
+        return self._make_request(f'{self._ENDPOINT_COURSES}/{course_ids}/sections/{section_ids}')
 
     def list_semesters(self):
         
@@ -85,7 +85,7 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(self._ENDPOINT_SEMESTERS)
+        return self._make_request(self._ENDPOINT_SEMESTERS)
 
     def list_departments(self):
         
@@ -95,4 +95,4 @@ class Courses(BaseAPI):
         
         """
         
-        return self.make_request(self._ENDPOINT_DEPARTMENTS)
+        return self._make_request(self._ENDPOINT_DEPARTMENTS)
