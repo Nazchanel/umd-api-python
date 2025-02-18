@@ -3,8 +3,8 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "umd-api"  # Package name
-version = "0.5.0"  # Version of your package
+name = "umd-api" 
+version = "0.5.1"
 description = "A package for accessing the UMD API in Python"
 readme = "README.md"
 authors = [
@@ -14,7 +14,7 @@ license = { text = "MIT" }
 keywords = ["umd", "education", "API"]
 
 dependencies = [
-    "requests"  # Ensure package names are quoted
+    "requests" 
 ]
 
 [project.urls]

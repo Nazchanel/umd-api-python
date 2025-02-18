@@ -1,17 +1,18 @@
 import requests
 
-class BaseAPI:
-    BASE_URL = 'https://api.umd.io/v1'
+class _BaseAPI:
+    
+    __BASE_URL = 'https://api.umd.io/v1'
 
-    def make_request(self, endpoint, **kwargs):
+    def _make_request(self, endpoint, **kwargs):
         params = self._extract_params(**kwargs)
 
         try:
-            response = requests.get(f'{self.BASE_URL}/{endpoint}', params=params)
+            response = requests.get(f'{self.__BASE_URL}/{endpoint}', params=params)
             response.raise_for_status() 
             return response.json()
         except requests.HTTPError as http_err:
-            self.handle_error(http_err, response)
+            self._handle_error(http_err, response)
         except requests.RequestException as err:
             print(f"An error occurred: {err}")
         except ValueError:
@@ -20,7 +21,7 @@ class BaseAPI:
     def _extract_params(self, **kwargs):
         return {k: v for k, v in kwargs.items() if v is not None}
 
-    def handle_error(self, http_err, response):
+    def _handle_error(self, http_err, response):
         """Handle HTTP error responses."""
         try:
             error_info = response.json()

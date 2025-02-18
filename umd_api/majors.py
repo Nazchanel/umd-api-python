@@ -1,6 +1,7 @@
-from .base_api import BaseAPI
+from .base_api import _BaseAPI
 
-class Majors(BaseAPI):
+class Majors(_BaseAPI):
+    
     def list_majors(self):
         
         """
@@ -9,4 +10,4 @@ class Majors(BaseAPI):
 
         """
 
-        return self.make_request('majors/list')
+        return self._make_request('majors/list')

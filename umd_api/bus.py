@@ -1,10 +1,11 @@
-from .base_api import BaseAPI
+from .base_api import _BaseAPI
 
-class Bus(BaseAPI):
+class Bus(_BaseAPI):
+    
     _ENDPOINT_ROUTES = 'bus/routes'
     _ENDPOINT_STOPS = 'bus/stops'
 
-    def list_routes(self, **kwargs):
+    def list_routes(self):
 
         """
 
@@ -12,7 +13,7 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(self._ENDPOINT_ROUTES, **kwargs)
+        return self._make_request(self._ENDPOINT_ROUTES)
     
     
     def view_specific_routes(self, route_ids):
@@ -23,7 +24,7 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(f'{self._ENDPOINT_ROUTES}/{route_ids}')
+        return self._make_request(f'{self._ENDPOINT_ROUTES}/{route_ids}')
     
     
     def list_stops(self):
@@ -34,7 +35,7 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(self._ENDPOINT_STOPS)
+        return self._make_request(self._ENDPOINT_STOPS)
 
    
     def get_specific_stops(self, stop_ids):
@@ -45,7 +46,7 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(f'{self._ENDPOINT_STOPS}/{stop_ids}')
+        return self._make_request(f'{self._ENDPOINT_STOPS}/{stop_ids}')
 
     def current_bus_locations_by_route(self, route_id):
 
@@ -55,7 +56,7 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(f'{self._ENDPOINT_ROUTES}/{route_id}/locations')
+        return self._make_request(f'{self._ENDPOINT_ROUTES}/{route_id}/locations')
 
     def bus_schedules(self, route_id):
 
@@ -65,7 +66,7 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(f'{self._ENDPOINT_ROUTES}/{route_id}/schedules')
+        return self._make_request(f'{self._ENDPOINT_ROUTES}/{route_id}/schedules')
 
     def get_arrivals_for_stop(self, route_id, stop_id):
 
@@ -75,4 +76,4 @@ class Bus(BaseAPI):
 
         """
 
-        return self.make_request(f'{self._ENDPOINT_ROUTES}/{route_id}/arrivals/{stop_id}')
+        return self._make_request(f'{self._ENDPOINT_ROUTES}/{route_id}/arrivals/{stop_id}')

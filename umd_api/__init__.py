@@ -1,8 +1,6 @@
-from .base_api import Base  # Example import
-from .bus import Bus         # Example import
-from .courses import Courses  # Example import
-from .majors import Majors    # Example import
-from .map import Map          # Example import
-from .professors import Professors  # Example import
-
-
+from .base_api import _BaseAPI
+from .bus import Bus        
+from .courses import Courses 
+from .majors import Majors   
+from .map import Map         
+from .professors import Professors 
