@@ -3,7 +3,7 @@ from .base_api import _BaseAPI
 class Search(_BaseAPI):
     _ENDPOINT_SEARCH = 'search'
 
-    def search(self, query, limit=None, offset=None):
+    def search(self, query, limit=30, offset=0):
 
         """
 
@@ -11,5 +11,7 @@ class Search(_BaseAPI):
     
         """
 
-        self._make_request(endpoint='search', query=query, limit=limit, offset=offset)
+
+
+        self._make_request(endpoint=self._ENDPOINT_SEARCH, query=query, limit=limit, offset=offset)
         

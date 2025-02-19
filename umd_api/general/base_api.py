@@ -7,7 +7,7 @@ class _BaseAPI:
     def _make_request(self, endpoint, **kwargs):
         params = self._extract_params(**kwargs)
 
-        print(f'{self.__BASE_URL}/{endpoint}')
+        # print(f'{self.__BASE_URL}/{endpoint}')
         try:
             response = requests.get(f'{self.__BASE_URL}/{endpoint}', params=params)
             response.raise_for_status() 

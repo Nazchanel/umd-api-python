@@ -34,3 +34,8 @@ class _BaseAPI:
             print(f"Documentation: {docs}")
         except ValueError:
             print(f"Received an error response, but couldn't parse JSON: {response.text}")
+    
+    def _bool_to_string(self, i):
+        if type(i) != bool:
+            raise ValueError("Must enter a boolean value")
+        return "true" if i else "false"
