@@ -107,3 +107,7 @@ courses = Courses()
 ### Wakatime (Time Spent Programming)
 
 [![wakatime](https://wakatime.com/badge/user/d2cf396a-1b98-4795-9559-b880684c63b7/project/6064c94d-4e62-413f-8e6f-68c974df4e07.svg)](https://wakatime.com/badge/user/d2cf396a-1b98-4795-9559-b880684c63b7/project/6064c94d-4e62-413f-8e6f-68c974df4e07)
+
+[![wakatime](https://wakatime.com/badge/user/d2cf396a-1b98-4795-9559-b880684c63b7/project/8dd367da-8a21-4a43-9308-b02267536c0f.svg)](https://wakatime.com/badge/user/d2cf396a-1b98-4795-9559-b880684c63b7/project/8dd367da-8a21-4a43-9308-b02267536c0f)
+
+Combine the two for total time
