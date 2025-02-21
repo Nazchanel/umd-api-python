@@ -11,6 +11,4 @@ class Grades(_BaseAPI):
 
         """
 
-
         return self._make_request(self._ENDPOINT_GRADES, course=course, professor=professor, semester=semester, section=section)
-

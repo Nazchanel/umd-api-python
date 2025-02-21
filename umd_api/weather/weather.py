@@ -7,7 +7,7 @@ from time import time
 from datetime import  datetime
 
 class Weather():
-    def get_weather_data(station="", start_time="", end_time=""): 
+    def get_weather_data(self, station="", start_time="", end_time=""): 
         """
         Valid Parameters:
         station: 'williams', 'atlantic', 'vmh', 'golf', 'chem'
@@ -118,47 +118,7 @@ class Weather():
         except requests.exceptions.RequestException as e:
             raise RuntimeError(f"API request failed: {e}")
     
-    def get_hourly_forecast():    
-        hourly_forecast = []
-        url = "https://weather.umd.edu/"
-
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        a = soup.find('div', id="umdwx_weeklyfcst_widget-9")
-
-        for day in a.find_all('div', class_='fcst_day')[:5]:  # First 5 elements are hourly forecast
-            time = day.find('div', class_='fcst_txt-day').text.strip()
-            temp = day.find('div', class_='fcst_txt-temp')
-            wind = day.find('div', class_='fcst_txt-wind')
-            
-            temp =  temp.text.replace('\u2009', ' ').replace('F', ' ').strip()
-
-            wind = re.sub(r'[^\x00-\x7F]+', '', wind.text)
-
-            wind = wind.replace('mph', '').strip()
-            
-            hour, period = time.split()
-
-            hour = int(hour)
-            
-            if period == 'PM' and hour != 12:
-                hour += 12
-            elif period == 'AM' and hour == 12:
-                hour = 0
-
-            time = hour
-
-            
-            if time and temp and wind:  # Ensure elements exist
-                hourly_forecast.append({
-                    'time': time,
-                    'temperature': temp,
-                    'wind': wind
-                })
-        return hourly_forecast
-
-
-    def save_radar_gif(dir=""):
+    def save_radar_gif(self, dir=""):
         """
         Downloads the latest radar GIF and saves it to the specified directory.
         

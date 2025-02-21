@@ -35,6 +35,13 @@ professors = Professors()
 courses = Courses()
 ```
 
+```python
+from umd_api.weather import Weather, Forecast
+
+weather = Weather()
+forecast = Forecast()
+```
+
 ## Methods
 
 <details>
@@ -103,6 +110,22 @@ courses = Courses()
 - `get_course(name, reviews=False)`
 - `get_courses(department=None, reviews=False, limit=100, offset=0)`
 </details>
+<details>
+<summary><strong>Weather</strong></summary>
+
+**Weather**
+- `get_weather_data(station="", start_time="", end_time=")`
+- `get_hourly_forecast()`
+- `save_radar_gif()`
+- `get_weather_descrption()`
+---
+
+**Forecast**
+- `get_hourly_forecast()`
+- `get_weekly_forecast()`
+
+</details>
+
 
 ### Wakatime (Time Spent Programming)
 
