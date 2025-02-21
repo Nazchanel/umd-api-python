@@ -10,7 +10,7 @@
 [https://pypi.org/project/umd-api](https://pypi.org/project/umd-api)
 
 ## Weather
-[https://weather.umd.com](https://weather.umd.com)
+[https://weather.umd.com](https://weather.umd.edu)
 
 ## Installation
 ```bash
