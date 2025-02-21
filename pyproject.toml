@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "umd-api" 
-version = "0.65.2"
+version = "0.65.5"
 description = "A package for accessing the UMD API in Python"
 readme = "README.md"
 authors = [
@@ -14,8 +14,12 @@ license = { text = "MIT" }
 keywords = ["umd", "education", "API"]
 
 dependencies = [
-    "requests" 
+    "requests",
+    "beautifulsoup4",   
+    "regex",            
 ]
+
+requires-python = ">=3.10"
 
 [project.urls]
 "Documentation" = "https://github.com/Nazchanel/umd-api-python"

@@ -1,7 +1,5 @@
-# from .base_api import _BaseAPI
-# from .grades import Grades
-# from .courses import Courses
-# from .professors import Professors
-# from .search import Search
+from .weather import Weather
+from .forecast import Forecast
 
-# __all__ = ["Grades", "Courses", "Professors", "Search"]
+
+__all__ = ['Weather', 'Forecast']
