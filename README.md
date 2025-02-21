@@ -9,6 +9,9 @@
 ## PyPI
 [https://pypi.org/project/umd-api](https://pypi.org/project/umd-api)
 
+## Weather
+[https://weather.umd.com](https://weather.umd.com)
+
 ## Installation
 ```bash
 pip install umd-api
