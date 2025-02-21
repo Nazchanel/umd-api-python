@@ -6,11 +6,12 @@
 ## PlanetTerp (`umd_api/planet_terp`)
 [https://planetterp.com/api/](https://planetterp.com/api/)
 
+## Weather (`umd_api/weather`)
+[https://weather.umd.com](https://weather.umd.edu)
+
 ## PyPI
 [https://pypi.org/project/umd-api](https://pypi.org/project/umd-api)
 
-## Weather
-[https://weather.umd.com](https://weather.umd.edu)
 
 ## Installation
 ```bash
@@ -45,7 +46,7 @@ weather = Weather()
 forecast = Forecast()
 ```
 
-## Methods
+## Modules
 
 <details>
 <summary><strong>General</strong></summary>
