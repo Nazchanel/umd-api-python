@@ -7,7 +7,7 @@
 [https://planetterp.com/api/](https://planetterp.com/api/)
 
 ## Weather (`umd_api/weather`)
-[https://weather.umd.com](https://weather.umd.edu)
+[https://weather.umd.edu](https://weather.umd.edu)
 
 ## PyPI
 [https://pypi.org/project/umd-api](https://pypi.org/project/umd-api)
