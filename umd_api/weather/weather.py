@@ -19,104 +19,50 @@ class Weather():
         - If end_time is provided but no start_time → raises ValueError.
 
         """
-
+        
         url = "https://weather.umd.edu/wordpress/wp-content/plugins/meso-fsct/functions/get-data.php"
-
-        station = station.lower()
-        db = ""
-
-        current_data_flag = False
-
-        def validate_date_format(date_str):
-            try:
-                if date_str:  # Only validate if the string is not empty
-                    datetime.strptime(date_str, '%m/%d/%y')
-            except ValueError:
-                raise ValueError(f"Invalid date format: {date_str}. Expected format: MM/DD/YY")
-
-        # Ensure start_time is provided if end_time is set
-        if start_time == '' and end_time != '':
+        
+        stations_db = {
+            "": "mesoterp7DB", "atlantic": "mesoterp7DB", "golf": "mesoterp6DB",
+            "vmh": "mesoterp1DB", "williams": "mesoterp8DB", "chem": "mesoterp3DB"
+        }
+        
+        if station.lower() not in stations_db:
+            raise ValueError("Valid Station not Provided")
+        
+        def to_timestamp(date_str):
+            return int(datetime.strptime(date_str, '%m/%d/%y').replace(hour=0, minute=0, second=0).timestamp())
+        
+        if end_time and not start_time:
             raise ValueError("Start Time Must be Provided")
-
-        # Validate date formats if they are provided
-        if start_time != '':
-            validate_date_format(start_time)
-        if end_time != '':
-            validate_date_format(end_time)
-
-        # Convert provided times to Unix timestamps
-        if start_time != '' and end_time != '':
-            start_time = int(datetime.strptime(start_time, '%m/%d/%y').replace(hour=0, minute=0, second=0).timestamp())
-            end_time = int(datetime.strptime(end_time, '%m/%d/%y').replace(hour=0, minute=0, second=0).timestamp())
-        elif start_time != '' and end_time == '':
-            start_time = int(datetime.strptime(start_time, '%m/%d/%y').replace(hour=0, minute=0, second=0).timestamp())
-            end_time = int(time())
-        elif start_time == '' and end_time == '':
-            current_data_flag = True
-
-            start_time = int(time()) - 120  # 2 minutes ago
-            end_time = int(time())  # Now
-
+        
+        start_time = to_timestamp(start_time) if start_time else int(time()) - 120
+        end_time = to_timestamp(end_time) if end_time else int(time())
+        
         if end_time <= start_time:
             raise ValueError("End time must be greater than Start time")
-
-        match station:
-            case '':
-                db = 'mesoterp7DB'
-            case 'atlantic':
-                db = "mesoterp7DB"
-            case 'golf':
-                db = "mesoterp6DB"
-            case 'vmh':
-                db = "mesoterp1DB"
-            case 'williams':
-                db = "mesoterp8DB"
-            case 'chem':
-                db = "mesoterp3DB"
-            case _:
-                raise ValueError("Valid Station not Provided")
-
-
-        PAYLOAD = {
-            "startms": start_time,
+        
+        payload = {
+            "startms": start_time, 
             "endms": end_time,
-            "db": db,
+            "db": stations_db[station.lower()],
             "table": "archive",
             "cols": ["dateTime", "outTemp", "dewpoint", "barometer", "rainRate", "windSpeed", "windGust", "windDir"]
         }
-
+        
         try:
-            result = requests.post(url, json=PAYLOAD)
-            result.raise_for_status()  # Raise error for bad HTTP responses
-            data = result.json().get('data')
-
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            data = response.json().get("data")
+            
             if not data:
                 raise ValueError("No data returned from the API")
-
-            result_dict = {}
-
-            if current_data_flag:
-                result_dict = data[0]
-
-                for key in result_dict:
-                    try:
-                        result_dict[key] = float(result_dict[key])
-                    except (ValueError, TypeError):
-                        pass
-            else:
-                result_dict = data
-
-                for i in range(len(result_dict)):
-                    for key in result_dict[i]:
-                        try:
-                            result_dict[i][key] = float(result_dict[i][key])
-                        except (ValueError, TypeError):
-                            pass
-
-            return result_dict
-
+            
+            return [{k: float(v) if isinstance(v, (int, float, str)) and str(v).replace('.', '', 1).isdigit() else v for k, v in row.items()} for row in data]
+            
         except requests.exceptions.RequestException as e:
             raise RuntimeError(f"API request failed: {e}")
+
     
     def save_radar_gif(self, dir=""):
         """
@@ -157,7 +103,7 @@ class Weather():
         except OSError as e:
             print(f"Error saving file: {e}")
 
-    def get_weather_description():
+    def get_weather_description(self):
         url = 'https://weather.umd.edu/'
 
         response = requests.get(url)
@@ -175,3 +121,61 @@ class Weather():
         else:
             raise requests.exceptions.HTTPError(f"Failed to fetch the webpage. Status code: {response.status_code}")
 
+    def get_co2_levels(self, start_time, end_time=None):
+
+        """
+        
+        Fetch CO2 levels from the API.
+        
+        - `start_time` (str) must be provided in 'MM/DD/YY' format.
+        - `end_time` (str, optional) defaults to the current time if not provided.
+        - Start and end times must be at least one day apart.
+
+        """
+        
+        url = "https://weather.umd.edu/wordpress/wp-content/plugins/meso-fsct/functions/get-data.php"
+        
+        def validate_date(date_str):
+            try:
+                return datetime.strptime(date_str, '%m/%d/%y')
+            except ValueError:
+                raise ValueError(f"Invalid date format: {date_str}. Expected format: MM/DD/YY")
+        
+        start_dt = validate_date(start_time)
+        end_dt = validate_date(end_time) if end_time else datetime.utcnow()
+        
+        start_ts, end_ts = int(start_dt.timestamp()), int(end_dt.timestamp())
+        
+        if end_ts <= start_ts:
+            raise ValueError("End time must be greater than Start time")
+        
+        if (end_ts - start_ts) < 86400:
+            raise ValueError("Start to End range must be at least one day")
+        
+        payload = {
+            "start_timestamp": start_dt.strftime('%Y-%m-%d %H:%M:%S'),
+            "end_timestamp": end_dt.strftime('%Y-%m-%d %H:%M:%S'),
+            "db": "atl_co2",
+            "table": "co2_readings",
+            "cols": ["timestamp", "measurement_value"]
+        }
+        
+        try:
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            data = response.json().get('data', [])
+            
+            if not data:
+                raise ValueError("No data returned from the API")
+            
+            for record in data:
+                for key in record:
+                    try:
+                        record[key] = float(record[key])
+                    except (ValueError, TypeError):
+                        pass
+            
+            return data
+        
+        except requests.exceptions.RequestException as e:
+            raise RuntimeError(f"API request failed: {e}")

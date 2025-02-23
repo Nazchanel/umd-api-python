@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 class Forecast():
 
-    def get_hourly_forecast():
+    def get_hourly_forecast(self):
         hourly_forecast = []
         url = "https://weather.umd.edu/"
 
@@ -43,7 +43,7 @@ class Forecast():
                 })
         return hourly_forecast
 
-    def get_weekly_forecast():  
+    def get_weekly_forecast(self):  
         url = "https://weather.umd.edu/"
 
         response = requests.get(url)
