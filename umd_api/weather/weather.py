@@ -7,24 +7,43 @@ from time import time
 from datetime import  datetime
 
 class Weather():
-    def get_weather_data(self, station="", start_time="", end_time=""): 
+    def get_weather_data(self, station="", start_time="", end_time="", data=None): 
+        
         """
         Valid Parameters:
         station: 'williams', 'atlantic', 'vmh', 'golf', 'chem'
         start_time and end_time must be in the following format: 'MM/DD/YY'
         Must be a valid range with end_time being after start_time.
 
+        data is a list of the data points you want to fetch
+        ["dateTime", "outTemp", "dewpoint", "barometer", "rainRate", "windSpeed", "windGust", "windDir"] is default
+
         - If neither start_time nor end_time are provided → gets latest data only.
         - If start_time is provided but not end_time → gets data from start_time to present.
         - If end_time is provided but no start_time → raises ValueError.
 
         """
+
+        DEFAULT_DATA_COLUMNS = ["dateTime", "outTemp", "dewpoint", "barometer", "rainRate", "windSpeed", "windGust", "windDir"]
+        
+        if data is None:
+            data = DEFAULT_DATA_COLUMNS
+
+        invalid_columns = [item for item in data if item not in DEFAULT_DATA_COLUMNS]
+        if invalid_columns:
+            raise ValueError(f"Invalid values: {', '.join(invalid_columns)} are not in the predefined list.")
+        
+        current_data_flag = not start_time and not end_time
         
         url = "https://weather.umd.edu/wordpress/wp-content/plugins/meso-fsct/functions/get-data.php"
         
         stations_db = {
-            "": "mesoterp7DB", "atlantic": "mesoterp7DB", "golf": "mesoterp6DB",
-            "vmh": "mesoterp1DB", "williams": "mesoterp8DB", "chem": "mesoterp3DB"
+            "": "mesoterp7DB",
+            "atlantic": "mesoterp7DB",
+            "golf": "mesoterp6DB",
+            "vmh": "mesoterp1DB",
+            "williams": "mesoterp8DB",
+            "chem": "mesoterp3DB"
         }
         
         if station.lower() not in stations_db:
@@ -58,7 +77,10 @@ class Weather():
             if not data:
                 raise ValueError("No data returned from the API")
             
-            return [{k: float(v) if isinstance(v, (int, float, str)) and str(v).replace('.', '', 1).isdigit() else v for k, v in row.items()} for row in data]
+            if current_data_flag:
+                return [{k: float(v) if isinstance(v, (int, float, str)) and str(v).replace('.', '', 1).isdigit() else v for k, v in data[0].items()}][0]
+            else:
+                return [{k: float(v) if isinstance(v, (int, float, str)) and str(v).replace('.', '', 1).isdigit() else v for k, v in row.items()} for row in data]
             
         except requests.exceptions.RequestException as e:
             raise RuntimeError(f"API request failed: {e}")
@@ -155,7 +177,7 @@ class Weather():
         payload = {
             "start_timestamp": start_dt.strftime('%Y-%m-%d %H:%M:%S'),
             "end_timestamp": end_dt.strftime('%Y-%m-%d %H:%M:%S'),
-            "db": "atl_co2",
+            "db": "atl_co2", # Only the Atlantic Building Station Provides Green House Gas Level
             "table": "co2_readings",
             "cols": ["timestamp", "measurement_value"]
         }
