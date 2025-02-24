@@ -1,6 +1,7 @@
 import requests
 import re
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 class Forecast:
     BASE_URL = "https://weather.umd.edu/"
@@ -92,7 +93,10 @@ class Forecast:
 
     def _fix_day_name(self, day_name):
         """Fixes specific typos in day names."""
-        return 'Thu' if day_name == 'Thi' else day_name
+        three_letter_day = datetime.today().strftime('%a')
+
+        # Fixing typo in weather website where the current day is represented as 'Thi'
+        return three_letter_day if day_name == 'Thi' else day_name
 
     def _extract_temperatures(self, temp_range_text):
         """Extracts high and low temperatures from the temperature range text."""
