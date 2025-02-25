@@ -53,7 +53,7 @@ forecast = Forecast()
 ## Methods
 
 > [!WARNING]  
-> This list was last updated on release v0.65.6. The weather method documentation is not complete 
+> This list was last updated on release v0.65.6. The weather method documentation is not complete. View the [weather class](https://github.com/Nazchanel/umd-api-python/blob/master/umd_api/weather/weather.py) to see all the methods in detail.
 
 <details>
 <summary><strong>General</strong></summary>
