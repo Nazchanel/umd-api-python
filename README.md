@@ -50,9 +50,10 @@ weather = Weather()
 forecast = Forecast()
 ```
 
-## Modules
+## Methods
 
-***Not Up To Date***
+> [!WARNING]  
+> This list was last updated on release v0.65.6. The weather method documentation is not complete 
 
 <details>
 <summary><strong>General</strong></summary>
@@ -125,7 +126,6 @@ forecast = Forecast()
 
 **Weather**
 - `get_weather_data(station="", start_time="", end_time=")`
-- `get_hourly_forecast()`
 - `save_radar_gif()`
 - `get_weather_descrption()`
 ---
