@@ -44,10 +44,9 @@ courses = Courses()
 ```
 
 ```python
-from umd_api.weather import Weather, Forecast
+from umd_api.weather import Weather
 
 weather = Weather()
-forecast = Forecast()
 ```
 
 ## Methods
@@ -129,10 +128,6 @@ forecast = Forecast()
 - `save_radar_gif()`
 - `get_weather_descrption()`
 ---
-
-**Forecast**
-- `get_hourly_forecast()`
-- `get_weekly_forecast()`
 
 </details>
 
