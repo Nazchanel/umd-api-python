@@ -1,24 +1,31 @@
 import requests
-import json
 from bs4 import BeautifulSoup
 from pathlib import Path
-from time import time
+import time
 from datetime import datetime
 import pytz
-import os
 import pandas as pd
 
 class Weather:
     DEFAULT_DATA_COLUMNS = ["dateTime", "outTemp", "dewpoint", "barometer", "rainRate", "windSpeed", "windGust", "windDir"]
     STATIONS_DB = {
-        "": "mesoterp7DB",
-        "atlantic": "mesoterp7DB",
-        "golf": "mesoterp6DB",
-        "vmh": "mesoterp1DB",
+        "": "mesoterp13DB",
+        "atlantic": "mesoterp13DB",
         "williams": "mesoterp8DB",
-        "chem": "mesoterp3DB"
+        "chem": "mesoterp3DB",
+        "chesapeake": "mesoterp10DB",
+        "esicc": "mesoterp12DB",
+        "golf": "mesoterp6DB",
+        "observatory": "mesoterp2DB",
+        "van_munching":"mesoterp1DB",
+        "technology_ventures": "mesoterp11DB"
     }
-    RADAR_URL = "https://weather.umd.edu/wordpress/wp-content/uploads/umdwx-temp/radar.gif"
+    
+    RADAR_URLS = {
+        "image_loop":"https://radar.weather.gov/ridge/standard/KLWX_loop.gif",
+        "latest_image":"https://radar.weather.gov/ridge/standard/KLWX_0.gif"
+        }
+    
     DATA_URL = "https://weather.umd.edu/wordpress/wp-content/plugins/meso-fsct/functions/get-data.php"
 
     def download_data(self, stations, output_format, output_dir="", start_time="", end_time="", data=None):
@@ -26,8 +33,6 @@ class Weather:
             raise ValueError("Stations Must be a List of Strings") 
     
         data = data or self.DEFAULT_DATA_COLUMNS
-
-        # print(data)
 
         output_format = output_format.lower()
 
@@ -38,32 +43,41 @@ class Weather:
         for station in stations:
             output[station] = self.get_weather_data(station=station, start_time=start_time, end_time=end_time, data=data)
         
-        # Change this line
         if output_format.lower() == 'xlsx':
             self._save_excel(output, output_dir)
             
         else:
             self._save_csv(output, output_dir)
 
+    from datetime import datetime
+    import time
+
     def get_weather_data(self, station="", start_time="", end_time="", data=None):
         """
         Fetch weather data for a specified station and time range.
-        
+
         Valid Parameters:
         station: 'williams', 'atlantic', 'vmh', 'golf', 'chem'
-        start_time and end_time must be in 'MM/DD/YY' format.
+        start_time/end_time format: 'MM/DD/YY HH:MM AM/PM'
         If no time range is provided, gets the latest data.
         """
         data = data or self.DEFAULT_DATA_COLUMNS
         self._validate_data_columns(data)
         self._validate_station(station)
-        
-        start_time = self._convert_to_timestamp(start_time) if start_time else int(time()) - 120
-        end_time = self._convert_to_timestamp(end_time) if end_time else int(time())
-        
+
+        def parse_time(t):
+            # expects: "MM/DD/YY HH:MM AM/PM"
+            return int(datetime.strptime(t, "%m/%d/%y %I:%M %p").timestamp())
+
+        # defaults: last 2 minutes
+        now = int(time.time())
+
+        start_time = parse_time(start_time) if start_time else now - 120
+        end_time = parse_time(end_time) if end_time else now
+
         if end_time <= start_time:
             raise ValueError("End time must be greater than Start time")
-        
+
         payload = {
             "startms": start_time,
             "endms": end_time,
@@ -74,23 +88,26 @@ class Weather:
 
         return self._fetch_data(payload)
 
-    def save_radar_gif(self, dir=""):
+    def save_radar_gif(self, dir="", image_type="loop"):
         """
         Downloads the latest radar GIF and saves it to the specified directory.
         
         Args:
             dir (str): The directory where the GIF should be saved.
-        
+            image_type (str): Either "loop" or "latest", defaults to loop
         Returns:
             str: The full path of the saved GIF.
         """
+  
+        RADAR_URL = _validate_radar(image_type)
+        
         save_path = Path(dir).expanduser().resolve()
         save_path.mkdir(parents=True, exist_ok=True)
 
         gif_file = save_path / "radar.gif"
 
         try:
-            self._download_file(self.RADAR_URL, gif_file)
+            self._download_file(RADAR_URL, gif_file)
             print(f"Radar GIF saved successfully: {gif_file}")
             return str(gif_file)
         except Exception as e:
@@ -103,7 +120,7 @@ class Weather:
         Returns:
             str: Current weather description.
         """
-        url = 'https://weather.umd.edu/'
+        url = 'https://weather.umd.edu/wordpress/micronet/'
         response = requests.get(url)
         response.raise_for_status()
 
@@ -198,6 +215,14 @@ class Weather:
         if invalid_columns:
             raise ValueError(f"Invalid values: {', '.join(invalid_columns)} are not in the predefined list.")
 
+    def _validate_radar(self, radar_opt):
+        if radar_opt == "loop":
+            return self.RADAR_URLS["image_loop"]
+        elif radar_opt == "latest":
+            return self.RADAR_URLS["latest_image"]
+        else:
+            raise ValueError(f"Invalid value: {radar_opt}.")
+
     def _validate_station(self, station):
         """Validates the provided station against the known stations."""
         if station.lower() not in self.STATIONS_DB:
@@ -229,17 +254,12 @@ class Weather:
         excel_file = save_path / f"weather_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
 
         try:
-            # Create a Pandas Excel writer using Openpyxl as the engine
             with pd.ExcelWriter(excel_file, engine='openpyxl') as writer:
                 for station, records in data.items():
-                    # Convert dateTime to EST and format it
                     for record in records:
-                        # Check if dateTime is in string format, parse accordingly
                         if isinstance(record['dateTime'], str):
-                            # If it's a string, you might want to parse it here based on the expected format
                             local_dt = datetime.fromisoformat(record['dateTime']).astimezone(pytz.utc)
                         else:
-                            # Convert timestamp to a datetime object (assuming it's in seconds)
                             local_dt = datetime.fromtimestamp(record['dateTime'], tz=pytz.utc)
 
                         # Convert to EST
@@ -259,16 +279,23 @@ class Weather:
             print("An error occurred while saving the Excel file:", e)
             
     def _save_csv(self, data, dir=""):
-        # Define the output directory using Path
-        output_directory = Path(dir) / 'weather_data_csv'
+        output_directory = Path(dir) / "weather_data_csv"
         output_directory.mkdir(parents=True, exist_ok=True)
 
-        for station, records in data.items():
-            df = pd.DataFrame(records)
-            csv_filename = output_directory / f'{station}.csv'
+        est_tz = pytz.timezone("America/New_York")
 
+        for station, records in data.items():
+
+            # convert timestamps → readable time
+            for record in records:
+                dt = datetime.fromtimestamp(record["dateTime"], tz=pytz.utc)
+                record["dateTime"] = dt.astimezone(est_tz).strftime("%Y-%m-%d %I:%M:%S %p")
+
+            df = pd.DataFrame(records)
+
+            csv_filename = output_directory / f"{station}.csv"
             df.to_csv(csv_filename, index=False)
+
             print(f"Saved {csv_filename}")
 
         print("All CSV files created successfully.")
-
