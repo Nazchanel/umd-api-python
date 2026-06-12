@@ -14,7 +14,6 @@ from .planet_terp.grades import Grades
 from .planet_terp.search import Search
 
 # Self-Implemented weather.umd.edu
-from .weather.forecast import Forecast
 from .weather.weather import Weather
 
-__all__ = ["Bus", "Courses", "Majors", "Map", "Professors", "Grades", "Search", "Weather", "Forecast"]
+__all__ = ["Bus", "Courses", "Majors", "Map", "Professors", "Grades", "Search", "Weather"]
